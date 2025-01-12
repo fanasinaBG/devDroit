@@ -7,7 +7,10 @@ CREATE TABLE users (
     mdp VARCHAR(255)
 );
 
+SELECT * FROM users;
+
 INSERT into users (name,email,mdp)VALUES('fanasina','fansina@gmail.com','bandyBg');
+SELECT * FROM users WHERE mdp = 'bandyBg';
 select * from users;
 -- Table: Categories
 CREATE TABLE Categories (

@@ -12,7 +12,8 @@
     "axios": "^1.7.9",
     "express-session": "^1.18.1",
     "test": "file:",
-    "vue": "^3.4.29"
+    "vue": "^3.4.29",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",

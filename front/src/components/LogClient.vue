@@ -90,7 +90,9 @@ export default {
           if (user) {
             //tehirizina anaty session
             sessionStorage.setItem('user', JSON.stringify(user));
-            alert('Connexion réussie !');
+            // alert('Connexion réussie !');
+            console.log("Redirection vers /home...");
+            this.$router.push('/home');
           } else {
             this.errors.email = 'Identifiants incorrects.';
           }

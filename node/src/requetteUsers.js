@@ -13,6 +13,16 @@ async function getUsers(req, res) {
     }
   }
 
+  async function checkUsers(req, res) {
+    const { email, mdp } = req.body;
+    try {
+      const result = await pool.query('SELECT * FROM users WHERE email = $1 AND mdp = $2', [email, mdp]);
+      res.status(200).json(result.rows);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
    async function createUser(req, res) {
     const { name, email,mdp } = req.body;
     try {
@@ -25,5 +35,6 @@ async function getUsers(req, res) {
 
 module.exports = {
   getUsers,
-  createUser
+  createUser,
+  checkUsers
 };

@@ -1,5 +1,6 @@
 const express = require('express');
 const pool = require('./db');
+const Apii = require("./AutherApi");
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
 const{getArt,createArt,updateArt}=require('./requetteArt');
 const{getNotification,createNotification}=require('./requetteNotification');
@@ -51,6 +52,7 @@ app.put('/updateArt/:id',updateArt);
 app.get('/getNotification',getNotification);
 app.post('/createNotification',createNotification);
 
+app.use("/Api", Apii);
 
 console.log('Route /checkUsers définie');
 const PORT = 3000;

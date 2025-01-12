@@ -1,4 +1,4 @@
--- Active: 1728498475504@@127.0.0.1@5432@tovo
+-- Active: 1720712168678@@127.0.0.1@5432@droit
  --Table: user
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -108,7 +108,7 @@ CREATE TABLE Demande (
     dateFin DATE,
     idContrat int,
     FOREIGN KEY (idContrat) REFERENCES Contrats(id),
-    FOREIGN KEY (idArt1) REFERENCES Art(id),
+    FOREIGN KEY (idArt) REFERENCES Art(id),
     FOREIGN KEY (idUserDM) REFERENCES users(id),
     FOREIGN KEY (idMethodePayer) REFERENCES MethodePayer(id)
 );
@@ -124,15 +124,19 @@ CREATE TABLE EcheancesCategories (
 
 
 -- Table des contrats
+-- Création préalable d'un type ENUM (si nécessaire)
+CREATE TYPE licence_type AS ENUM ('Exclusive', 'Non-Exclusive');
+
+-- Création de la table Contrats
 CREATE TABLE Contrats (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     objet TEXT NOT NULL,
     date_debut DATE NOT NULL,
     date_fin DATE,
     territoire VARCHAR(255),
-    type_licence ENUM('Exclusive', 'Non-Exclusive') NOT NULL,
+    type_licence VARCHAR(255) NOT NULL,
     iduserProp INT NOT NULL,
     idUserDM INT NOT NULL,
-    FOREIGN KEY (iduserProp) REFERENCES users(id),
-    FOREIGN KEY (idUserDM) REFERENCES users(id)
+    CONSTRAINT fk_userProp FOREIGN KEY (iduserProp) REFERENCES users(id),
+    CONSTRAINT fk_userDM FOREIGN KEY (idUserDM) REFERENCES users(id)
 );

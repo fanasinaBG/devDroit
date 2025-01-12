@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('./db');
-const { getUsers,createUser} = require('./requetteUsers');
+const { getUsers,createUser,checkUsers} = require('./requetteUsers');
 const{getArt,createArt,updateArt}=require('./requetteArt');
 const{getNotification,createNotification}=require('./requetteNotification');
 
@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 
+app.post('/checkUsers', checkUsers);
 app.get('/getUsers', getUsers);
 app.post('/createUsers', createUser); 
 

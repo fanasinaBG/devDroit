@@ -77,9 +77,7 @@ export default {
       if (this.validateForm()) {
         const email = this.form.email.trim();
         const mdp = this.form.mdp.trim();
-        // Récupérer les utilisateurs avant de valider les identifiants
         this.getUsers().then(() => {
-          // Vérifier si les identifiants sont corrects
           const user = this.users.find(
             (u) => u.email === this.form.email.trim().toLowerCase() && u.mdp === this.form.mdp.trim()
           );
@@ -90,6 +88,8 @@ export default {
           console.log('le email recuperer est:',this.form.email );
 
           if (user) {
+            //tehirizina anaty session
+            sessionStorage.setItem('user', JSON.stringify(user));
             alert('Connexion réussie !');
           } else {
             this.errors.email = 'Identifiants incorrects.';
@@ -100,7 +100,6 @@ export default {
   },
 
   created() {
-    // Récupérer la liste des utilisateurs au chargement du composant
     this.getUsers();
   }
 };

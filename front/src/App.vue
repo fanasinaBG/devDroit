@@ -8,7 +8,7 @@ import LogClient from './components/LogClient.vue'
   </header>
 
   <main>
-    <LogClient />
+    <router-view></router-view>
   </main>
 </template>
 

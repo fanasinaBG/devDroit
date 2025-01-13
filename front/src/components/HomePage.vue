@@ -5,6 +5,7 @@ export default {
     return {
       user: null, // Stocke les informations de l'utilisateur récupérées depuis la session
       selectedFiles: [],
+      uploadedFiles:[],
       categories: [],
       selectedMenu: null, // Nouvelle variable pour suivre l'élément du menu sélectionné
       menuItems: [
@@ -27,22 +28,37 @@ export default {
         alert('Veuillez sélectionner un fichier avant de soumettre.');
         return;
       }
-
+          if (!this.fileQuantity || !this.selectedCategory) {
+        alert('Veuillez remplir la durée et sélectionner une catégorie.');
+        return;
+      }
+      if (!this.user) {
+        alert('Utilisateur non connecté.');
+        return;
+      }
       const formData = new FormData();
 
       this.selectedFiles.forEach((file) => {
         formData.append('files', file); // Ajoute chaque fichier dans FormData
       });
 
+      formData.append('duration', this.fileQuantity); // Ajouter la durée
+      formData.append('category', this.selectedCategory); // Ajouter la catégorie
+      formData.append('id',this.user.id);
+      
+
       try {
-        const response = await axios.post('http://votre-serveur/upload', formData, {
+        const response = await axios.post('http://localhost:3000/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Spécifie le type de contenu
           },
         });
+        this.uploadedFiles = response.data.data; // Stocker les fichiers récupérés
         console.log('Réponse du serveur:', response.data);
+        alert('Fichiers et données enregistrés avec succès !');
       } catch (error) {
         console.error('Erreur lors de l\'upload:', error);
+        alert('Erreur lors de l\'enregistrement des données.');
       }
     },
     async fetchCategories() {
@@ -50,6 +66,7 @@ export default {
         const response = await axios.get('http://localhost:3000/getCategories');
         this.categories = response.data; // Assigner les catégories récupérées
         console.log('le reponse est:',response.data);
+        
       } catch (error) {
         console.error('Erreur de récupération des catégories:', error);
       }
@@ -75,6 +92,7 @@ export default {
     <h1>Bienvenue sur la page d'accueil</h1>
     <p v-if="user">
       Vous êtes connecté en tant que <strong>{{ user.name }}</strong> (<em>{{ user.email }}</em>).
+      votre id est {{ user.id }}
     </p>
     <p v-else>
       Vous n'êtes pas connecté.
@@ -142,7 +160,34 @@ export default {
         </option>
       </select>
     </div>
+
+     <!-- Affichage des fichiers téléchargés -->
+     <div v-if="uploadedFiles.length > 0">
+      <h2>Fichiers téléchargés</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nom du fichier</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Durée</th>
+            <th>Catégorie</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="file in uploadedFiles" :key="file.id">
+            <td>{{ file.nom }}</td>
+            <td>{{ file.dateDebut }}</td>
+            <td>{{ file.dateFin }}</td>
+            <td>{{ file.duration }}</td>
+            <td>{{ file.category }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 </div>
+
+
 
 </template>
 

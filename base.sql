@@ -42,6 +42,8 @@ CREATE TABLE Art (
     dateFin DATE,
      FOREIGN KEY (idUser) REFERENCES users(id)
 );
+
+select * from Art;
 insert into Art(idUser,nom,dateDebut,dateFin)values(1,'song','2025-01-11','2025-01-21');
 
 select * from Art;

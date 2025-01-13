@@ -7,6 +7,7 @@ export default {
       selectedFiles: [],
       uploadedFiles:[],
       categories: [],
+      artCategories: [],
       selectedMenu: null, // Nouvelle variable pour suivre l'élément du menu sélectionné
       menuItems: [
         { id: 1, name: 'Enregistrement', path: '/home' },
@@ -71,6 +72,18 @@ export default {
         console.error('Erreur de récupération des catégories:', error);
       }
     },
+    async fetchArtCategories() {
+      try{
+
+        const userId = this.user.id; // Par exemple, ici 1 comme valeur de userId
+        console.log('user id est :',userId);
+        const response = await axios.get(`http://localhost:3000/getArtCategories/${userId}`);
+        this.artCategories = response.data;
+        console.log('le valeur est',response.data);
+      }catch(error){
+        console.error('Erreur lors de la récupération des catégories d\'art:', error);
+      }
+    },
     selectMenu(item) {
       this.selectedMenu = item.id; // Met à jour l'élément sélectionné
     }
@@ -82,6 +95,7 @@ export default {
       this.user = JSON.parse(userData);
     }
     this.fetchCategories();
+    this.fetchArtCategories();
   },
 };
 </script>
@@ -162,7 +176,10 @@ export default {
     </div>
 
      <!-- Affichage des fichiers téléchargés -->
-     <div v-if="uploadedFiles.length > 0">
+</div>
+
+
+<div v-if="artCategories.length > 0">
       <h2>Fichiers téléchargés</h2>
       <table>
         <thead>
@@ -170,23 +187,34 @@ export default {
             <th>Nom du fichier</th>
             <th>Date de début</th>
             <th>Date de fin</th>
-            <th>Durée</th>
             <th>Catégorie</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="file in uploadedFiles" :key="file.id">
-            <td>{{ file.nom }}</td>
-            <td>{{ file.dateDebut }}</td>
-            <td>{{ file.dateFin }}</td>
-            <td>{{ file.duration }}</td>
-            <td>{{ file.category }}</td>
+          <tr v-for="category in artCategories" :key="category.id">
+            <td>{{ category.artname }}</td>
+            <td>{{ category.startdate }}</td>
+            <td>{{ category.enddate}}</td>
+            <td>{{ category.categoryname }}</td>
           </tr>
         </tbody>
       </table>
     </div>
-</div>
 
+
+<div>
+    <h1>Catégories d'art</h1>
+    <!-- Affichage des catégories si elles sont disponibles -->
+    <div v-if="artCategories.length > 0">
+      <ul>
+        <li v-for="category in artCategories" :key="category.id">
+          {{ category.categoryname }} - {{ category.ArtName }}
+        </li>
+      </ul>
+    </div>
+    <!-- Message si aucune catégorie n'est disponible -->
+    <p v-else>Pas de catégories d'art disponibles.</p>
+  </div>
 
 
 </template>

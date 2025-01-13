@@ -1,9 +1,10 @@
 const express = require('express');
 const pool = require('./db');
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
-const{getArt,createArt,updateArt}=require('./requetteArt');
+const{getArt,createArt,updateArt,CategoryArt}=require('./requetteArt');
 const{getNotification,createNotification}=require('./requetteNotification');
 const{getCategories}=require('./requetteCategory');
+
 
 const app = express();
 const multer = require('multer');
@@ -55,6 +56,8 @@ app.get('/getNotification',getNotification);
 app.post('/createNotification',createNotification);
 
 app.get('/getCategories', getCategories);
+
+app.get('/getArtCategories/:userId', CategoryArt);
 
 
 // Configuration multer pour le stockage des fichiers

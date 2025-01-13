@@ -38,9 +38,25 @@ async function updateArt(req,res) {
     }
 }
 
+async function CategoryArt(req,res) {
+  const { userId } = req.params; 
+  console.log('userId:', userId);
+  try {
+    const result = await pool.query('SELECT * FROM ArtCategoriesView WHERE UserID = $1', [userId]);
+    if (result.rows.length > 0) {
+      res.status(200).json(result.rows);
+    } else {
+      res.status(404).json({ message: 'ArCartegory non trouvé' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 
 module.exports={
     getArt,
     createArt,
-    updateArt
+    updateArt,
+    CategoryArt
 }

@@ -14,9 +14,18 @@ SELECT * FROM users WHERE mdp = 'bandyBg';
 select * from users;
 -- Table: Categories
 CREATE TABLE Categories (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255)
 );
+
+select * from Categories
+
+drop table Categories;
+
+insert into Categories(name) values ('Brevets');
+insert into Categories(name) values ('droits dauteur');
+insert into Categories(name) values ('marques');
+insert into Categories(name) values ('dessins industriels');
 
 -- Table: Pays
 CREATE TABLE Pays (

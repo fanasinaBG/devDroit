@@ -3,6 +3,7 @@ const pool = require('./db');
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
 const{getArt,createArt,updateArt}=require('./requetteArt');
 const{getNotification,createNotification}=require('./requetteNotification');
+const{getCategories}=require('./requetteCategory');
 
 const app = express();
 const cors = require('cors');
@@ -50,6 +51,8 @@ app.put('/updateArt/:id',updateArt);
 
 app.get('/getNotification',getNotification);
 app.post('/createNotification',createNotification);
+
+app.get('/getCategories', getCategories);
 
 
 console.log('Route /checkUsers définie');

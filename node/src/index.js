@@ -1,10 +1,9 @@
 const express = require('express');
 const pool = require('./db');
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
-const{getArt,createArt,updateArt,CategoryArt}=require('./requetteArt');
-const{getNotification,createNotification}=require('./requetteNotification');
+const{getArt,createArt,updateArt,CategoryArt,CategoryArtNom}=require('./requetteArt');
 const{getCategories}=require('./requetteCategory');
-
+const{getNotifSame,createNotifSame}=require('./requetteNotifSame');
 
 const app = express();
 const multer = require('multer');
@@ -52,12 +51,15 @@ app.get('/getArt',getArt);
 app.post('/createArt', createArt);
 app.put('/updateArt/:id',updateArt);
 
-app.get('/getNotification',getNotification);
-app.post('/createNotification',createNotification);
-
 app.get('/getCategories', getCategories);
 
 app.get('/getArtCategories/:userId', CategoryArt);
+
+app.get('/getNotifSame', getNotifSame);
+
+app.post('/createNotifSame', createNotifSame);
+
+app.get('/categoryArt/:namemArt', CategoryArtNom);
 
 
 // Configuration multer pour le stockage des fichiers
@@ -92,12 +94,20 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
     const startDate = new Date();
     const endDate = calculateEndDate(startDate, duration); // Calcul de la date de fin
 
+   
+
     // Exemple de stockage dans la base de données
-    const queries = files.map((file) => {
+    const queries = files.map(async(file) => {
+      const same=await CategoryArtNom(file.filename);
+      if(same ){
+        const objet='dupliquer';
+        await createNotifSame(id,objet);
+      }
       return pool.query(
         'INSERT INTO Art (idUser,nom, dateDebut, dateFin) VALUES ($1, $2, $3,$4)',
         [id,file.filename,startDate.toISOString().split('T')[0],endDate]
       );
+     
     });
 
     const results=await Promise.all(queries);

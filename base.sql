@@ -87,13 +87,13 @@ CREATE TABLE echeances (
 );
 
 -- Table: Notification
-CREATE TABLE Notification (
+CREATE TABLE NotificationSame (
     id SERIAL PRIMARY KEY,
     idUser INT ,
     objet TEXT,
-    description TEXT,
     FOREIGN KEY (idUser) REFERENCES users(id)
 );
+drop table Notification;
 
 insert into Notification(idUser,objet,description) VALUES(1,'blabla','test');
 drop table Notification;

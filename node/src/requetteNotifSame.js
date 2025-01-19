@@ -14,9 +14,9 @@ async function getNotifSame(req,res) {
 }
 
 async function createNotifSame(req,res) {
-    const { idUser,objet} = req.body;
+    const { idUser,idArtorg,idArtcopie,objet} = req.body;
     try{
-        const result = await pool.query('INSERT INTO NotificationSame (idUser,objet ) VALUES ($1, $2) RETURNING *', [idUser,objet]);
+        const result = await pool.query('INSERT INTO NotificationSame (idUser,idArtorg,idArtcopie,objet ) VALUES ($1, $2,$3,$4) RETURNING *', [idUser,idArtorg,idArtcopie,objet]);
       res.status(201).json(result.rows[0]);
     } catch (error) {
         res.status(500).json({ error: error.message });

@@ -86,6 +86,10 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
     const { duration, category,id } = req.body; // Récupérer la durée et la catégorie
     const files = req.files; // Récupérer les fichiers
 
+    console.log('Body:', req.body);
+    console.log('files:', req.files);
+    
+
     if (!files || !duration || !category) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
@@ -98,14 +102,15 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
 
     // Exemple de stockage dans la base de données
     const queries = files.map(async(file) => {
-      const same=await CategoryArtNom(file.filename);
+      const same=await CategoryArtNom(String(file.filename));
+      // console.log("filename:",file.filename,"type:",typeof file.filename);
       if(same ){
         const objet='dupliquer';
         await createNotifSame(id,objet);
       }
       return pool.query(
         'INSERT INTO Art (idUser,nom, dateDebut, dateFin) VALUES ($1, $2, $3,$4)',
-        [id,file.filename,startDate.toISOString().split('T')[0],endDate]
+        [id,String(file.filename),startDate.toISOString().split('T')[0],endDate]
       );
      
     });

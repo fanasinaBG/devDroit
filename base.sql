@@ -45,6 +45,9 @@ CREATE TABLE Art (
      FOREIGN KEY (idUser) REFERENCES users(id)
 );
 
+
+select * from Art;
+
 CREATE VIEW ArtCategoriesView AS
 SELECT 
     Art.id AS ArtID,
@@ -89,10 +92,19 @@ CREATE TABLE echeances (
 -- Table: Notification
 CREATE TABLE NotificationSame (
     id SERIAL PRIMARY KEY,
-    idUser INT ,
+    idUserOriginal INT ,
+    idUserCopie INT,
+    idArtorg INT,
+    idArtcopie INT,
     objet TEXT,
+    FOREIGN KEY (idArtorg) REFERENCES Art(id),
+    FOREIGN KEY (idArtcopie) REFERENCES Art(id),
     FOREIGN KEY (idUser) REFERENCES users(id)
 );
+
+drop table NotificationSame;
+
+select * from NotificationSame;
 drop table Notification;
 
 insert into Notification(idUser,objet,description) VALUES(1,'blabla','test');

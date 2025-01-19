@@ -68,7 +68,8 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Ajout d'un timestamp au nom du fichier
+    //cb(null, Date.now() + path.extname(file.originalname)); // Ajout d'un timestamp au nom du fichier
+    cb(null,file.originalname);
   },
 });
 
@@ -103,10 +104,23 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
     // Exemple de stockage dans la base de données
     const queries = files.map(async(file) => {
       const same=await CategoryArtNom(String(file.filename));
-      // console.log("filename:",file.filename,"type:",typeof file.filename);
-      if(same ){
+      console.log('Nom de fichier vérifié :', file.filename, 'Résultat CategoryArtNom:', same);
+      if(same && id !=same.iduser ){
+        console.log("useer depuis le session:",id);
+        console.log("id USER:", same. iduser);
         const objet='dupliquer';
-        await createNotifSame(id,objet);
+        const query = `SELECT COUNT(*) AS total FROM Art`;
+        const isaColum = await pool.query(query);
+        const newId = isaColum.rows[0].total + 1;
+        await createNotifSame({
+          body:{
+                  idUserOriginal:id, 
+                  idUserCopie:same.iduser, 
+                  idArtOrgl:same.id, 
+                  idArtcopie:newId, 
+                  obje:objet,
+                   },
+              });
       }
       return pool.query(
         'INSERT INTO Art (idUser,nom, dateDebut, dateFin) VALUES ($1, $2, $3,$4)',

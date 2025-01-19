@@ -57,7 +57,7 @@ async function CategoryArtNom(namemArt) {
   try {
     console.log('Reçu dans CategoryArtNom:', namemArt, 'Type:', typeof namemArt);
     const result = await pool.query(
-      'SELECT ArtName FROM ArtCategoriesView WHERE ArtName = $1',
+      'SELECT id,idUser,nom FROM Art WHERE nom = $1',
       [namemArt]
     );
 

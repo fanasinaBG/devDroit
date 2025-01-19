@@ -10,6 +10,8 @@ CREATE TABLE users (
 SELECT * FROM users;
 
 INSERT into users (name,email,mdp)VALUES('fanasina','fansina@gmail.com','bandyBg');
+
+INSERT into users (name,email,mdp)VALUES('nope','nope@gmail.com','Bg');
 SELECT * FROM users WHERE mdp = 'bandyBg';
 select * from users;
 -- Table: Categories
@@ -45,6 +47,7 @@ CREATE TABLE Art (
      FOREIGN KEY (idUser) REFERENCES users(id)
 );
 
+select * from Art;
 
 select * from Art;
 
@@ -94,12 +97,13 @@ CREATE TABLE NotificationSame (
     id SERIAL PRIMARY KEY,
     idUserOriginal INT ,
     idUserCopie INT,
-    idArtorg INT,
-    idArtcopie INT,
+    idArtOrgl INT,
+    idArtCopie INT,
     objet TEXT,
-    FOREIGN KEY (idArtorg) REFERENCES Art(id),
-    FOREIGN KEY (idArtcopie) REFERENCES Art(id),
-    FOREIGN KEY (idUser) REFERENCES users(id)
+    FOREIGN KEY (idUserOriginal) REFERENCES users(id),
+    FOREIGN KEY (idUserCopie) REFERENCES users(id),
+    FOREIGN KEY (idArtOrgl) REFERENCES Art(id),
+    FOREIGN KEY (idArtcopie) REFERENCES Art(id)
 );
 
 drop table NotificationSame;

@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require("db");
+const db = require("./db");
 
 const createLitige = (litige, callback) => {
   const { id, idArt1, idArt2, description, dateDebut, statut } = litige;

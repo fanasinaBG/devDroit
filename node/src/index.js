@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('./db');
-const Apii = require("./AutherApi");
+const amm = require("./AutherApi");
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
 const{getArt,createArt,updateArt,CategoryArt,CategoryArtNom}=require('./requetteArt');
 const{getCategories}=require('./requetteCategory');
@@ -55,7 +55,7 @@ app.put('/updateArt/:id',updateArt);
 app.get('/getNotification',getNotification);
 app.post('/createNotification',createNotification);
 
-app.use("/Api", Apii);
+app.use("/amm", amm);
 
 app.get('/getCategories', getCategories);
 

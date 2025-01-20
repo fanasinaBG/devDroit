@@ -4,7 +4,7 @@ const amm = require("./AutherApi");
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
 const{getArt,createArt,updateArt,CategoryArt,CategoryArtNom}=require('./requetteArt');
 const{getCategories}=require('./requetteCategory');
-const{getNotifSame,createNotifSame}=require('./requetteNotifSame');
+const{getNotifSame,createNotifSame,creeNotifSame}=require('./requetteNotifSame');
 
 const app = express();
 const multer = require('multer');
@@ -74,7 +74,8 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Ajout d'un timestamp au nom du fichier
+    //cb(null, Date.now() + path.extname(file.originalname)); // Ajout d'un timestamp au nom du fichier
+    cb(null,file.originalname);
   },
 });
 
@@ -92,6 +93,10 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
     const { duration, category,id } = req.body; // Récupérer la durée et la catégorie
     const files = req.files; // Récupérer les fichiers
 
+    console.log('Body:', req.body);
+    console.log('files:', req.files);
+    
+
     if (!files || !duration || !category) {
       return res.status(400).json({ message: 'Tous les champs sont requis.' });
     }
@@ -104,14 +109,27 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
 
     // Exemple de stockage dans la base de données
     const queries = files.map(async(file) => {
-      const same=await CategoryArtNom(file.filename);
-      if(same ){
+      const same=await CategoryArtNom(String(file.filename));
+      console.log('Nom de fichier vérifié :', file.filename, 'Résultat CategoryArtNom:', same);
+      if(same && id !=same.iduser ){
+        console.log("useer depuis le session:",id);
+        console.log("id USER:", same. iduser);
         const objet='dupliquer';
-        await createNotifSame(id,objet);
+        const query = `SELECT COUNT(*) AS total FROM Art`;
+        const isaColum = await pool.query(query);
+        const newId = parseInt(isaColum.rows[0].total) + 1;
+        console.log('newid:',newId,'ancien:',isaColum);
+        await creeNotifSame(
+          id, // idUserOriginal
+          same.iduser, // idUserCopie
+          same.id, // idArtOrgl
+          newId, // idArtcopie
+          objet // obje
+        );
       }
       return pool.query(
         'INSERT INTO Art (idUser,nom, dateDebut, dateFin) VALUES ($1, $2, $3,$4)',
-        [id,file.filename,startDate.toISOString().split('T')[0],endDate]
+        [id,String(file.filename),startDate.toISOString().split('T')[0],endDate]
       );
      
     });

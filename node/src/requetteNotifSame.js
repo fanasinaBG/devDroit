@@ -14,17 +14,33 @@ async function getNotifSame(req,res) {
 }
 
 async function createNotifSame(req,res) {
-    const { idUser,objet} = req.body;
+    console.log("Corps de la requête:", req.body);
+    const { idUserOriginal,idUserCopie,idArtOrgl,idArtcopie,obje} = req.body;
+    if (!res) {
+        throw new Error('Réponse HTTP (res) non définie');
+    }
     try{
-        const result = await pool.query('INSERT INTO NotificationSame (idUser,objet ) VALUES ($1, $2) RETURNING *', [idUser,objet]);
+        const result = await pool.query('INSERT INTO NotificationSame (idUserOriginal,idUserCopie,idArtOrgl,idArtcopie,objet ) VALUES ($1,$2,$3,$4,$5) RETURNING *', [idUserOriginal,idUserCopie,idArtOrgl,idArtcopie,obje]);
       res.status(201).json(result.rows[0]);
     } catch (error) {
         res.status(500).json({ error: error.message });
       }
 }
 
+async function creeNotifSame(idUserOriginal,idUserCopie,idArtOrgl,idArtcopie,obje) {
+  // console.log("Corps de la requête:", req.body);
+  // const { idUserOriginal,idUserCopie,idArtOrgl,idArtcopie,obje} = req.body;
+  try{
+      const result = await pool.query('INSERT INTO NotificationSame (idUserOriginal,idUserCopie,idArtOrgl,idArtcopie,objet ) VALUES ($1,$2,$3,$4,$5) RETURNING *', [idUserOriginal,idUserCopie,idArtOrgl,idArtcopie,obje]);
+      return result.rows[0];
+  } catch (error) {
+      throw new Error(`Erreur lors de la création de la notification : ${error.message}`);
+    }
+}
+
 module.exports={
     getNotifSame,
-    createNotifSame
+    createNotifSame,
+    creeNotifSame
     
 }

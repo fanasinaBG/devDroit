@@ -10,6 +10,8 @@ CREATE TABLE users (
 SELECT * FROM users;
 
 INSERT into users (name,email,mdp)VALUES('fanasina','fansina@gmail.com','bandyBg');
+
+INSERT into users (name,email,mdp)VALUES('nope','nope@gmail.com','Bg');
 SELECT * FROM users WHERE mdp = 'bandyBg';
 select * from users;
 -- Table: Categories
@@ -44,6 +46,10 @@ CREATE TABLE Art (
      FOREIGN KEY (idCategories) REFERENCES Categories(id),
      FOREIGN KEY (idUser) REFERENCES users(id)
 );
+
+select * from Art;
+
+select * from Art;
 
 CREATE VIEW ArtCategoriesView AS
 SELECT 
@@ -86,13 +92,23 @@ CREATE TABLE echeances (
     nom VARCHAR(255) 
 );
 
+select * from  NotificationSame;
 -- Table: Notification
 CREATE TABLE NotificationSame (
     id SERIAL PRIMARY KEY,
-    idUser INT ,
+    idUserOriginal INT ,
+    idUserCopie INT,
+    idArtOrgl INT,
+    idArtCopie INT,
     objet TEXT,
-    FOREIGN KEY (idUser) REFERENCES users(id)
+    FOREIGN KEY (idUserOriginal) REFERENCES users(id),
+    FOREIGN KEY (idUserCopie) REFERENCES users(id),
+    FOREIGN KEY (idArtOrgl) REFERENCES Art(id)  
 );
+
+drop table NotificationSame;
+
+select * from NotificationSame;
 drop table Notification;
 
 insert into Notification(idUser,objet,description) VALUES(1,'blabla','test');

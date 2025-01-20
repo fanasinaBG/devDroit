@@ -1,4 +1,4 @@
--- Active: 1728498475504@@127.0.0.1@5432@tovo
+-- Active: 1720712168678@@127.0.0.1@5432@droit
  --Table: user
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -32,13 +32,13 @@ insert into Categories(name) values ('dessins industriels');
 -- Table: Pays
 CREATE TABLE Pays (
     id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) 
 );
 
 -- Table: Art
 CREATE TABLE Art (
     id SERIAL PRIMARY KEY,
-    idUser INT ,
+    idUser INT,
     nom VARCHAR(255) ,
     dateDebut DATE,
     dateFin DATE,
@@ -79,8 +79,8 @@ select * from Art;
 -- Table: Chanson
 CREATE TABLE artPays (
     id INT PRIMARY KEY,
-    idPays INT NOT NULL,
-    idArt INT NOT NULL,
+    idPays INT ,
+    idArt INT ,
     FOREIGN KEY (idPays) REFERENCES Pays(id),
     FOREIGN KEY (idArt) REFERENCES Art(id)
 );
@@ -89,7 +89,7 @@ CREATE TABLE artPays (
 -- Table: echeances(Renouvellement,Annuité)
 CREATE TABLE echeances (
     id INT PRIMARY KEY,
-    nom VARCHAR(255) NOT NULL
+    nom VARCHAR(255) 
 );
 
 select * from  NotificationSame;
@@ -117,8 +117,8 @@ drop table Notification;
 -- Table: RaisonArtPays
 CREATE TABLE DemandePays (
     id INT PRIMARY KEY,
-    idPays INT NOT NULL,
-    idDmd INT NOT NULL,
+    idPays INT ,
+    idDmd INT ,
     FOREIGN KEY (idPays) REFERENCES Pays(id),
     FOREIGN KEY (idDmd) REFERENCES Demande(id)
 );
@@ -126,8 +126,8 @@ CREATE TABLE DemandePays (
 -- Table: ArtCategories
 CREATE TABLE ArtCategories (
     id INT PRIMARY KEY,
-    idArt INT NOT NULL,
-    idCategorie INT NOT NULL,
+    idArt INT ,
+    idCategorie INT ,
     FOREIGN KEY (idArt) REFERENCES Art(id),
     FOREIGN KEY (idCategorie) REFERENCES Categories(id)
 );
@@ -135,13 +135,54 @@ CREATE TABLE ArtCategories (
 -- Table: MethodePayer
 CREATE TABLE MethodePayer (
     id INT PRIMARY KEY,
-    methodeName VARCHAR(255) NOT NULL
+    methodeName VARCHAR(255) 
 );
+
+CREATE VIEW LitigeDetails AS
+SELECT
+    l.id AS litigeId,
+    l.description AS litigeDescription,
+    l.dateDebut AS litigeDateDebut,
+    l.statut AS litigeStatut,
+    a1.nom AS article1Nom,
+    a2.nom AS article2Nom
+FROM Litige l
+JOIN Art a1 ON l.idArt1 = a1.id
+JOIN Art a2 ON l.idArt2 = a2.id
+LEFT JOIN artPays ap1 ON a1.id = ap1.idArt
+LEFT JOIN artPays ap2 ON a2.id = ap2.idArt;
+
+
+
+SELECT c.type_licence, c.idUserDM, c.date_debut, c.date_fin, a.nom AS article, 
+                  d.statut AS statut_demande, mp.methodeName
+           FROM contrats c
+           Left JOIN demande d ON c.id = d.idContrat
+           left JOIN art a ON d.idArt = a.id
+           left JOIN methodePayer mp ON d.idMethodePayer = mp.id
+           WHERE c.id = 2;
+
+
+
+CREATE VIEW ContratsLicencesTiers AS
+SELECT 
+    c.id AS contrat_id,
+    c.objet AS contrat_objet,
+    c.date_debut AS contrat_date_debut,
+    c.date_fin AS contrat_date_fin,
+    c.territoire AS contrat_territoire,
+    c.type_licence AS contrat_type_licence,
+    uProp.name AS proprietaire_name,
+    uDM.name AS tiers_name
+FROM Contrats c
+JOIN users uProp ON c.iduserProp = uProp.id
+JOIN users uDM ON c.idUserDM = uDM.id;
+
 
 CREATE TABLE Litige (
     id INT PRIMARY KEY,
-    idArt1 INT NOT NULL,
-    idArt2 INT NOT NULL,
+    idArt1 INT ,
+    idArt2 INT ,
     description TEXT,
     dateDebut DATE,
     statut VARCHAR(255),
@@ -151,23 +192,23 @@ CREATE TABLE Litige (
 
 CREATE TABLE Demande (
     id INT PRIMARY KEY,
-    idArt INT NOT NULL,
-    idUserDM INT NOT NULL,
+    idArt INT ,
+    idUserDM INT ,
     statut VARCHAR(55),
-    idMethodePayer INT NOT NULL,
+    idMethodePayer INT ,
     dateDebut DATE,
     dateFin DATE,
     idContrat int,
     FOREIGN KEY (idContrat) REFERENCES Contrats(id),
-    FOREIGN KEY (idArt1) REFERENCES Art(id),
+    FOREIGN KEY (idArt) REFERENCES Art(id),
     FOREIGN KEY (idUserDM) REFERENCES users(id),
     FOREIGN KEY (idMethodePayer) REFERENCES MethodePayer(id)
 );
 
 CREATE TABLE EcheancesCategories (
     id INT PRIMARY KEY,
-    idEcheances INT NOT NULL,
-    idCategorie INT NOT NULL,
+    idEcheances INT ,
+    idCategorie INT ,
     FOREIGN KEY (idEcheances) REFERENCES echeances(id),
     FOREIGN KEY (idCategorie) REFERENCES Categories(id)
 );
@@ -175,15 +216,20 @@ CREATE TABLE EcheancesCategories (
 
 
 -- Table des contrats
+-- Création préalable d'un type ENUM (si nécessaire)
+CREATE TYPE licence_type AS ENUM ('Exclusive', 'Non-Exclusive');
+
+-- Création de la table Contrats
 CREATE TABLE Contrats (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    objet TEXT NOT NULL,
-    date_debut DATE NOT NULL,
+    id SERIAL PRIMARY KEY,
+    objet TEXT ,
+    date_debut DATE ,
     date_fin DATE,
     territoire VARCHAR(255),
-    type_licence ENUM('Exclusive', 'Non-Exclusive') NOT NULL,
-    iduserProp INT NOT NULL,
-    idUserDM INT NOT NULL,
-    FOREIGN KEY (iduserProp) REFERENCES users(id),
-    FOREIGN KEY (idUserDM) REFERENCES users(id)
+    type_licence VARCHAR(255) ,
+    iduserProp INT ,
+    idUserDM INT ,
+    statue VARCHAR(50),
+    CONSTRAINT fk_userProp FOREIGN KEY (iduserProp) REFERENCES users(id),
+    CONSTRAINT fk_userDM FOREIGN KEY (idUserDM) REFERENCES users(id)
 );

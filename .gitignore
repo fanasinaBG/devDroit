@@ -1,0 +1,4 @@
+
+node/src/db.js
+node/node_modules/*
+front/node_modules/*

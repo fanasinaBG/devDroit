@@ -1,6 +1,14 @@
 <script>
 import axios from 'axios';
+import Litige from "./Litige.vue";
+import EnregistrerLitige from "./EnregistrerLitige.vue";
+import Redevances from "./Redevances.vue";
 export default {
+  components: {
+    Litige,
+    EnregistrerLitige,
+    Redevances,
+  },
   data() {
     return {
       user: null, // Stocke les informations de l'utilisateur récupérées depuis la session
@@ -11,10 +19,10 @@ export default {
       selectedMenu: null, // Nouvelle variable pour suivre l'élément du menu sélectionné
       menuItems: [
         { id: 1, name: 'Enregistrement', path: '/home' },
-        { id: 2, name: 'Echéances et alertes', path: '/echeance' },
-        { id: 3, name: 'Gestion', path: '/calendrier' },
-        { id: 4, name: 'Rapports et analyses ', path: '/Rapports' },
-        { id: 5, name: 'Consultation juridique  ', path: '/consultation' },
+        { id: 2, name: 'Echéances et alertes', path: '/home' },
+        { id: 3, name: 'Gestion', path: '/home' },
+        { id: 4, name: 'Rapports et analyses ', path: '/home' },
+        { id: 5, name: 'Consultation juridique  ', path: '/home' },
       ],
     };
   },
@@ -102,7 +110,7 @@ export default {
 
 
 <template>
-  <div>
+  <!-- <div>
     <h1>Bienvenue sur la page d'accueil</h1>
     <p v-if="user">
       Vous êtes connecté en tant que <strong>{{ user.name }}</strong> (<em>{{ user.email }}</em>).
@@ -111,7 +119,7 @@ export default {
     <p v-else>
       Vous n'êtes pas connecté.
     </p>
-  </div>
+  </div> -->
 
   <!-- Menu -->
   <div class="menu-container">
@@ -123,7 +131,14 @@ export default {
       </li>
     </ul>
   </div>
-
+    
+  <div v-if="selectedMenu === 3" class="file-upload-container">
+    <Litige />
+  </div>
+  <div v-if="selectedMenu === 4" class="file-upload-container">
+    <Redevances />
+    <EnregistrerLitige />
+  </div>
   <!-- Formulaire d'upload, visible uniquement si 'Enregistrement' est sélectionné -->
   <div v-if="selectedMenu === 1" class="file-upload-container">
   <h2 class="title">Uploader des fichiers</h2>

@@ -12,7 +12,7 @@ export default {
       menuItems: [
         { id: 1, name: 'Enregistrement', path: '/home' },
         { id: 2, name: 'Echéances et alertes', path: '/echeance' },
-        { id: 3, name: 'Gestion', path: '/Gestion' },
+        { id: 3, name: 'Gestion', path: '/calendrier' },
         { id: 4, name: 'Rapports et analyses ', path: '/Rapports' },
         { id: 5, name: 'Consultation juridique  ', path: '/consultation' },
       ],

@@ -111,7 +111,8 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
         const objet='dupliquer';
         const query = `SELECT COUNT(*) AS total FROM Art`;
         const isaColum = await pool.query(query);
-        const newId = isaColum.rows[0].total + 1;
+        const newId = parseInt(isaColum.rows[0].total) + 1;
+        console.log('newid:',newId,'ancien:',isaColum);
         await creeNotifSame(
           id, // idUserOriginal
           same.iduser, // idUserCopie

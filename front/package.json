@@ -9,10 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
     "axios": "^1.7.9",
     "express-session": "^1.18.1",
     "test": "file:",
     "vue": "^3.4.29",
+    "vue-cal": "^4.10.2",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {

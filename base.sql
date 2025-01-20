@@ -92,7 +92,7 @@ CREATE TABLE echeances (
     nom VARCHAR(255) NOT NULL
 );
 
-drop table NotificationSame;
+select * from  NotificationSame;
 -- Table: Notification
 CREATE TABLE NotificationSame (
     id SERIAL PRIMARY KEY,

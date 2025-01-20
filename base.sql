@@ -40,11 +40,32 @@ CREATE TABLE Art (
     nom VARCHAR(255) ,
     dateDebut DATE,
     dateFin DATE,
+    idCategories int,
+     FOREIGN KEY (idCategories) REFERENCES Categories(id),
      FOREIGN KEY (idUser) REFERENCES users(id)
 );
 
-select * from Art;
+CREATE VIEW ArtCategoriesView AS
+SELECT 
+    Art.id AS ArtID,
+    Art.nom AS ArtName,
+    Art.dateDebut AS StartDate,
+    Art.dateFin AS EndDate,
+    Categories.name AS CategoryName,
+    Art.idUser AS UserID
+FROM 
+    Art
+INNER JOIN 
+    Categories ON Art.idCategories = Categories.id;
+
+
+
+select * from ArtCategoriesView;
+
+drop table Art;
 insert into Art(idUser,nom,dateDebut,dateFin)values(1,'song','2025-01-11','2025-01-21');
+
+insert into Art(idUser,nom,dateDebut,dateFin,idCategories)values(1,'film','2025-01-11','2025-01-21',1);
 
 select * from Art;
 
@@ -66,13 +87,13 @@ CREATE TABLE echeances (
 );
 
 -- Table: Notification
-CREATE TABLE Notification (
+CREATE TABLE NotificationSame (
     id SERIAL PRIMARY KEY,
     idUser INT ,
     objet TEXT,
-    description TEXT,
     FOREIGN KEY (idUser) REFERENCES users(id)
 );
+drop table Notification;
 
 insert into Notification(idUser,objet,description) VALUES(1,'blabla','test');
 drop table Notification;

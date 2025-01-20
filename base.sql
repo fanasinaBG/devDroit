@@ -41,9 +41,13 @@ CREATE TABLE Art (
     dateDebut DATE,
     dateFin DATE,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     idCategories int,
      FOREIGN KEY (idCategories) REFERENCES Categories(id),
      FOREIGN KEY (idUser) REFERENCES users(id)
+=======
+    FOREIGN KEY (idUser) REFERENCES users(id)
+>>>>>>> Stashed changes
 =======
     FOREIGN KEY (idUser) REFERENCES users(id)
 >>>>>>> Stashed changes

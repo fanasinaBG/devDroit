@@ -3,7 +3,7 @@ const pool = require('./db');
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
 const{getArt,createArt,updateArt,CategoryArt,CategoryArtNom}=require('./requetteArt');
 const{getCategories}=require('./requetteCategory');
-const{getNotifSame,createNotifSame}=require('./requetteNotifSame');
+const{getNotifSame,createNotifSame,creeNotifSame}=require('./requetteNotifSame');
 
 const app = express();
 const multer = require('multer');
@@ -112,15 +112,13 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
         const query = `SELECT COUNT(*) AS total FROM Art`;
         const isaColum = await pool.query(query);
         const newId = isaColum.rows[0].total + 1;
-        await createNotifSame({
-          body:{
-                  idUserOriginal:id, 
-                  idUserCopie:same.iduser, 
-                  idArtOrgl:same.id, 
-                  idArtcopie:newId, 
-                  obje:objet,
-                   },
-              });
+        await creeNotifSame(
+          id, // idUserOriginal
+          same.iduser, // idUserCopie
+          same.id, // idArtOrgl
+          newId, // idArtcopie
+          objet // obje
+        );
       }
       return pool.query(
         'INSERT INTO Art (idUser,nom, dateDebut, dateFin) VALUES ($1, $2, $3,$4)',

@@ -92,6 +92,7 @@ CREATE TABLE echeances (
     nom VARCHAR(255) NOT NULL
 );
 
+drop table NotificationSame;
 -- Table: Notification
 CREATE TABLE NotificationSame (
     id SERIAL PRIMARY KEY,
@@ -102,8 +103,7 @@ CREATE TABLE NotificationSame (
     objet TEXT,
     FOREIGN KEY (idUserOriginal) REFERENCES users(id),
     FOREIGN KEY (idUserCopie) REFERENCES users(id),
-    FOREIGN KEY (idArtOrgl) REFERENCES Art(id),
-    FOREIGN KEY (idArtcopie) REFERENCES Art(id)
+    FOREIGN KEY (idArtOrgl) REFERENCES Art(id)  
 );
 
 drop table NotificationSame;

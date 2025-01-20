@@ -42,7 +42,7 @@ async function CategoryArt(req,res) {
   const { userId } = req.params; 
   console.log('userId:', userId);
   try {
-    const result = await pool.query('SELECT * FROM ArtCategoriesView WHERE UserID = $1', [userId]);
+    const result = await pool.query('SELECT * FROM ArtCategoriesView WHERE userid = $1', [userId]);
     if (result.rows.length > 0) {
       res.status(200).json(result.rows);
     } else {

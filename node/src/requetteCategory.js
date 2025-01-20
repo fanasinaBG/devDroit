@@ -14,6 +14,16 @@ async function getCategories(req, res) {
     }
   }
 
+  async function getIDCategories(category) {
+    try {
+      const result = await pool.query('SELECT id FROM Categories Where name = $1',[category]);
+      return result.rows[0];
+    } catch (error) {
+      throw new Error(`Erreur lors de la création de la notification : ${error.message}`);
+    }
+  }
+
   module.exports={
-    getCategories
+    getCategories,
+    getIDCategories
   }

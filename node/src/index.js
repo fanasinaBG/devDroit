@@ -3,8 +3,9 @@ const pool = require('./db');
 const amm = require("./AutherApi");
 const { getUsers,createUser,checkUsers} = require('./requetteUsers');
 const{getArt,createArt,updateArt,CategoryArt,CategoryArtNom}=require('./requetteArt');
-const{getCategories}=require('./requetteCategory');
+const{getCategories,getIDCategories}=require('./requetteCategory');
 const{getNotifSame,createNotifSame,creeNotifSame}=require('./requetteNotifSame');
+const{getPays}=require('./requettePays');
 
 const app = express();
 const multer = require('multer');
@@ -19,6 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 //   checkUsers(req, res);
 // });
 // app.post('/checkUsers', checkUsers);
+
+app.get('/getPays',getPays);
 
 app.post('/checkUsers', async (req, res) => {
   const { email, mdp } = req.body;
@@ -52,8 +55,8 @@ app.get('/getArt',getArt);
 app.post('/createArt', createArt);
 app.put('/updateArt/:id',updateArt);
 
-app.get('/getNotification',getNotification);
-app.post('/createNotification',createNotification);
+// app.get('/getNotification',getNotification);
+// app.post('/createNotification',createNotification);
 
 app.use("/amm", amm);
 
@@ -105,7 +108,8 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
     const startDate = new Date();
     const endDate = calculateEndDate(startDate, duration); // Calcul de la date de fin
 
-   
+    const idCategory =await getIDCategories(category);
+    console.log('idCategory recus est:',idCategory,'et le category est:',category);
 
     // Exemple de stockage dans la base de données
     const queries = files.map(async(file) => {
@@ -128,8 +132,8 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
         );
       }
       return pool.query(
-        'INSERT INTO Art (idUser,nom, dateDebut, dateFin) VALUES ($1, $2, $3,$4)',
-        [id,String(file.filename),startDate.toISOString().split('T')[0],endDate]
+        'INSERT INTO Art (idUser,nom, dateDebut, dateFin, idCategories) VALUES ($1, $2, $3, $4, $5)',
+        [id,String(file.filename),startDate.toISOString().split('T')[0],endDate, category]
       );
      
     });
@@ -147,6 +151,24 @@ app.post('/upload', upload.array('files', 10), async (req, res) => {
     res.status(500).json({ message: 'Erreur lors de l\'enregistrement des données.' });
   }
 });
+
+app.post("/uploadPays", async(req, res) => {
+  const { pays, category } = req.body;
+  console.log('Request body:', req.body);
+  console.log("Données reçues:", { pays, category });
+
+  try {
+    await pool.query(
+      'INSERT INTO artPays (idPays, idArt) VALUES ($1, $2)',
+      [pays, category]
+    );
+    res.status(200).json({ message: "Données enregistrées avec succès !" });
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement:", error);
+    res.status(500).json({ message: "Erreur lors de l'enregistrement des données." });
+  }
+});
+
 
 
 console.log('Route /checkUsers définie');

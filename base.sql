@@ -1,4 +1,4 @@
--- Active: 1720712168678@@127.0.0.1@5432@droit
+-- Active: 1728498475504@@127.0.0.1@5432@tovo
  --Table: user
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -24,6 +24,7 @@ select * from Categories
 
 drop table Categories;
 
+SELECT id FROM Categories Where name = 'Brevets';
 insert into Categories(name) values ('Brevets');
 insert into Categories(name) values ('droits dauteur');
 insert into Categories(name) values ('marques');
@@ -31,10 +32,14 @@ insert into Categories(name) values ('dessins industriels');
 
 -- Table: Pays
 CREATE TABLE Pays (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) 
 );
 
+drop table Pays;
+
+insert into Pays(name)VALUES('Madagascar');
+insert into Pays(name)VALUES('France');
 -- Table: Art
 CREATE TABLE Art (
     id SERIAL PRIMARY KEY,
@@ -64,6 +69,10 @@ FROM
 INNER JOIN 
     Categories ON Art.idCategories = Categories.id;
 
+select * from ArtCategoriesView;
+
+SELECT * FROM ArtCategoriesView 
+
 
 
 select * from ArtCategoriesView;
@@ -78,12 +87,14 @@ select * from Art;
 
 -- Table: Chanson
 CREATE TABLE artPays (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     idPays INT ,
     idArt INT ,
     FOREIGN KEY (idPays) REFERENCES Pays(id),
     FOREIGN KEY (idArt) REFERENCES Art(id)
 );
+
+select * from artPays;
 
 
 -- Table: echeances(Renouvellement,Annuité)

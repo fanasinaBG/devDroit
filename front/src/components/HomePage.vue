@@ -16,6 +16,9 @@ export default {
       uploadedFiles:[],
       categories: [],
       artCategories: [],
+      Pays: [],
+      selectedCategory: null, 
+      selectedPays:null,
       selectedMenu: null, // Nouvelle variable pour suivre l'élément du menu sélectionné
       menuItems: [
         { id: 1, name: 'Enregistrement', path: '/home' },
@@ -26,6 +29,7 @@ export default {
       ],
     };
   },
+
   methods: {
     handleFileUpload(event) {
       const files = event.target.files;
@@ -70,10 +74,59 @@ export default {
         alert('Erreur lors de l\'enregistrement des données.');
       }
     },
+
+    async uploadPays(artid) {
+      console.log('pays',this.selectedPays);
+      console.log('category',artid);
+
+      if (this.selectedPays===null ) {
+        alert('Veuillez sélectionner un pays avant de soumettre.');
+        return;
+      }
+      if (artid===null) {
+        alert('Veuillez sélectionner une catégorie.');
+        return;
+      }
+      // if (!this.user) {
+      //   alert('Utilisateur non connecté.');
+      //   return;
+      // }
+
+      const datas = {
+        pays: this.selectedPays,
+        category: artid
+      };
+
+
+      console.log('FormData avant envoi:', datas);
+
+      try {
+        const response = await axios.post('http://localhost:3000/uploadPays', datas, {
+          headers: {
+            'Content-Type': 'application/json', // Spécifie le type de contenu
+          },
+        });
+        console.log('Réponse du serveur:', response.data);
+        alert('Données envoyées avec succès !');
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi des données:', error);
+        alert('Erreur lors de l\'envoi des données.');
+      }
+},
+
     async fetchCategories() {
       try {
         const response = await axios.get('http://localhost:3000/getCategories');
         this.categories = response.data; // Assigner les catégories récupérées
+        console.log('le reponse est:',response.data);
+      } catch (error) {
+        console.error('Erreur de récupération des catégories:', error);
+      }
+    },
+    async fetchpays() {
+      try {
+        const response = await axios.get('http://localhost:3000/getPays');
+        this.Pays = response.data; // Assigner les catégories récupérées
         console.log('le reponse est:',response.data);
         
       } catch (error) {
@@ -92,6 +145,7 @@ export default {
         console.error('Erreur lors de la récupération des catégories d\'art:', error);
       }
     },
+    
     selectMenu(item) {
       this.selectedMenu = item.id; // Met à jour l'élément sélectionné
     }
@@ -104,6 +158,7 @@ export default {
     }
     this.fetchCategories();
     this.fetchArtCategories();
+    this.fetchpays();
   },
 };
 </script>
@@ -199,18 +254,35 @@ export default {
       <table>
         <thead>
           <tr>
+            <th>id</th>
             <th>Nom du fichier</th>
             <th>Date de début</th>
             <th>Date de fin</th>
             <th>Catégorie</th>
+            <th>Pays</th>
+            <th>Action</th>
+            <th>test</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="category in artCategories" :key="category.id">
+          <tr v-for="category in artCategories" :key="category.artid">
+            <td :data-id="category.artid">{{ category.artid }}</td>
             <td>{{ category.artname }}</td>
             <td>{{ category.startdate }}</td>
             <td>{{ category.enddate}}</td>
             <td>{{ category.categoryname }}</td>
+            <td>
+              <select id="pays-select" v-model="selectedPays" class="pays-select">
+                <option value="" disabled>Sélectionner une pay</option>
+                  <option v-for="Pay in Pays" :key="Pay.id" :value="Pay.id">
+                  {{ Pay.name }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <button @click="uploadPays(category.artid)">Envoyer</button>
+          </td>
+          <td>{{ category.id }}</td>
           </tr>
         </tbody>
       </table>

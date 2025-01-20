@@ -179,7 +179,7 @@ export default {
 </div>
 
 
-<div v-if="artCategories.length > 0">
+<div>
       <h2>Fichiers téléchargés</h2>
       <table>
         <thead>

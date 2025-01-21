@@ -202,19 +202,20 @@ CREATE TABLE Litige (
 );
 
 CREATE TABLE Demande (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     idArt INT ,
     idUserDM INT ,
+    idUserDMD INT ,
     statut VARCHAR(55),
-    idMethodePayer INT ,
-    dateDebut DATE,
-    dateFin DATE,
     idContrat int,
-    FOREIGN KEY (idContrat) REFERENCES Contrats(id),
     FOREIGN KEY (idArt) REFERENCES Art(id),
     FOREIGN KEY (idUserDM) REFERENCES users(id),
-    FOREIGN KEY (idMethodePayer) REFERENCES MethodePayer(id)
+    FOREIGN KEY (idUserDMD) REFERENCES users(id)
 );
+
+drop table Demande;
+
+select * from Demande;
 
 CREATE TABLE EcheancesCategories (
     id INT PRIMARY KEY,

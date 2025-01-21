@@ -6,6 +6,7 @@ const{getArt,createArt,updateArt,CategoryArt,CategoryArtNom}=require('./requette
 const{getCategories,getIDCategories}=require('./requetteCategory');
 const{getNotifSame,createNotifSame,creeNotifSame}=require('./requetteNotifSame');
 const{getPays}=require('./requettePays');
+const{createDemandeClient}=require('./demande');
 
 const app = express();
 const multer = require('multer');
@@ -22,6 +23,25 @@ app.use(express.urlencoded({ extended: true }));
 // app.post('/checkUsers', checkUsers);
 
 app.get('/getPays',getPays);
+
+app.post('/getDemande', async(req,res)=>{
+    const{artid,idUserDMD,idUserDM}=req.body;
+    const statut='demander';
+    console.log(req.body);
+    try { 
+      await createDemandeClient({
+        idArt:artid,
+        idUserDMD,
+        idUserDM,
+        statut,
+      });
+      res.status(200).send({ message: 'Demande créée avec succès !' });
+
+    }catch(error){
+      console.error('Erreur dans createDemande:', error);
+      res.status(500).send({ error: 'Erreur lors de la création de la demande' });
+    }
+});
 
 app.post('/checkUsers', async (req, res) => {
   const { email, mdp } = req.body;

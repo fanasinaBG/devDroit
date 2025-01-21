@@ -26,6 +26,7 @@ export default {
         { id: 3, name: 'Gestion', path: '/home' },
         { id: 4, name: 'Rapports et analyses ', path: '/home' },
         { id: 5, name: 'Consultation juridique  ', path: '/home' },
+        { id: 5, name: 'demande licence', path: '/demande' },
       ],
     };
   },

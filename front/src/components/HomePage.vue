@@ -3,11 +3,13 @@ import axios from 'axios';
 import Litige from "./Litige.vue";
 import EnregistrerLitige from "./EnregistrerLitige.vue";
 import Redevances from "./Redevances.vue";
+import Demande from "./Demande.vue";
 export default {
   components: {
     Litige,
     EnregistrerLitige,
     Redevances,
+    Demande,
   },
   data() {
     return {
@@ -26,7 +28,8 @@ export default {
         { id: 3, name: 'Gestion', path: '/home' },
         { id: 4, name: 'Rapports et analyses ', path: '/home' },
         { id: 5, name: 'Consultation juridique  ', path: '/home' },
-        { id: 5, name: 'demande licence', path: '/demande' },
+        { id: 6, name: 'demande licence', path: '/home' },
+        { id: 7, name: 'liste demande licence', path: '/ListeDemande' },
       ],
     };
   },
@@ -190,6 +193,9 @@ export default {
     
   <div v-if="selectedMenu === 3" class="file-upload-container">
     <Litige />
+  </div>
+  <div v-if="selectedMenu === 6" class="file-upload-container">
+    <Demande />
   </div>
   <div v-if="selectedMenu === 4" class="file-upload-container">
     <Redevances />

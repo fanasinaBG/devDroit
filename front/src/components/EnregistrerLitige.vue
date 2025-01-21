@@ -56,23 +56,7 @@
             <option value="Non-Exclusive">Non-Exclusive</option>
           </select>
         </div>
-        <div>
-          <label for="statut_demande">Statut de la Demande</label>
-          <select v-model="nouveauContrat.statue" required>
-            <option value="En Attente">En Attente</option>
-            <option value="Validée">Validée</option>
-            <option value="Refusée">Refusée</option>
-          </select>
-        </div>
-        <div>
-          <label for="iduserProp">ID Propriétaire</label>
-          <input type="number" v-model="nouveauContrat.iduserProp" required />
-        </div>
-        <div>
-          <label for="idUserDM">ID Demandeur</label>
-          <input type="number" v-model="nouveauContrat.idUserDM" required />
-        </div>
-        <button type="submit">{{ isEditing ? 'Modifier' : 'Créer le Contrat' }}</button>
+        <button @click="valider(nouveauContrat.date_debut,nouveauContrat.date_fin)">valider</button>
       </form>
     </div>
   </template>
@@ -91,8 +75,6 @@
           territoire: "",
           type_licence: "Exclusive",
           statue: "En Attente",  // Champ pour le statut de la demande
-          iduserProp: null,
-          idUserDM: null,
         },
         isEditing: false, // Pour vérifier si on est en mode modification
         contratToEdit: null, // Pour stocker le contrat à modifier
@@ -109,6 +91,10 @@
         } catch (error) {
           console.error("Erreur lors de la récupération des contrats:", error);
         }
+      },
+      valider(date_debut,date_fin){
+        console.log("Date de début:", date_debut);
+        console.log("Date de fin:", date_fin);
       },
       async creerContrat() {
         try {
@@ -151,8 +137,6 @@
           territoire: "",
           type_licence: "Exclusive",
           statut_demande: "En Attente",
-          iduserProp: null,
-          idUserDM: null,
         };
         this.isEditing = false;
         this.contratToEdit = null;

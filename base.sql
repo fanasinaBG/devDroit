@@ -208,10 +208,14 @@ CREATE TABLE Demande (
     idUserDMD INT ,
     statut VARCHAR(55),
     idContrat int,
+    date_debut DATE,
+    date_fin DATE,
     FOREIGN KEY (idArt) REFERENCES Art(id),
     FOREIGN KEY (idUserDM) REFERENCES users(id),
     FOREIGN KEY (idUserDMD) REFERENCES users(id)
 );
+
+drop table Demande;
 
 drop table Demande;
 
@@ -245,3 +249,36 @@ CREATE TABLE Contrats (
     CONSTRAINT fk_userProp FOREIGN KEY (iduserProp) REFERENCES users(id),
     CONSTRAINT fk_userDM FOREIGN KEY (idUserDM) REFERENCES users(id)
 );
+
+CREATE  VIEW Vue_Demande_Details AS
+SELECT 
+    d.id AS demande_id,
+    d.statut AS statut_demande,
+    d.idContrat AS contrat_id,
+    a.id AS art_id,
+    a.nom AS art_nom,
+    a.dateDebut AS art_date_debut,
+    a.dateFin AS art_date_fin,
+    c.name AS categorie_nom,
+    u1.id AS user_dm_id,
+    u1.name AS user_dm_nom,
+    u1.email AS user_dm_email,
+    u2.id AS user_dmd_id,
+    u2.name AS user_dmd_nom,
+    u2.email AS user_dmd_email
+FROM 
+    Demande d
+JOIN 
+    Art a ON d.idArt = a.id
+LEFT JOIN 
+    Categories c ON a.idCategories = c.id
+JOIN 
+    users u1 ON d.idUserDM = u1.id
+JOIN 
+    users u2 ON d.idUserDMD = u2.id;
+
+
+select * from Vue_Demande_Details;
+
+drop view Vue_Demande_Details;
+

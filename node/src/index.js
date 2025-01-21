@@ -6,7 +6,7 @@ const{getArt,createArt,updateArt,CategoryArt,CategoryArtNom}=require('./requette
 const{getCategories,getIDCategories}=require('./requetteCategory');
 const{getNotifSame,createNotifSame,creeNotifSame}=require('./requetteNotifSame');
 const{getPays}=require('./requettePays');
-const{createDemandeClient}=require('./demande');
+const{createDemandeClient,Demande,DemandeVue}=require('./demande');
 
 const app = express();
 const multer = require('multer');
@@ -23,6 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 // app.post('/checkUsers', checkUsers);
 
 app.get('/getPays',getPays);
+
+app.get('/Demande',Demande);
+
+app.get('/DemandeVue/:userId',DemandeVue);
 
 app.post('/getDemande', async(req,res)=>{
     const{artid,idUserDMD,idUserDM}=req.body;

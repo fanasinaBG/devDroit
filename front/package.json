@@ -15,6 +15,7 @@
     "@fullcalendar/timegrid": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "express-session": "^1.18.1",
     "test": "file:",
     "vue": "^3.4.29",

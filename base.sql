@@ -71,7 +71,7 @@ select * from ArtCategoriesView;
 drop table Art;
 insert into Art(idUser,nom,dateDebut,dateFin)values(1,'song','2025-01-11','2025-01-21');
 
-insert into Art(idUser,nom,dateDebut,dateFin,idCategories)values(1,'film','2025-01-11','2025-01-21',1);
+insert into Art(idUser,nom,dateDebut,dateFin,idCategories)values(1,'photo','2025-01-12','2025-02-25',1);
 
 select * from Art;
 
@@ -103,8 +103,38 @@ CREATE TABLE NotificationSame (
     objet TEXT,
     FOREIGN KEY (idUserOriginal) REFERENCES users(id),
     FOREIGN KEY (idUserCopie) REFERENCES users(id),
-    FOREIGN KEY (idArtOrgl) REFERENCES Art(id)  
+    FOREIGN KEY (idArtOrgl) REFERENCES Art(id)
 );
+
+CREATE TABLE notifications_annuite (
+    id SERIAL PRIMARY KEY,
+    idUser INT,
+    idArt INT,
+    message TEXT,
+    date_echeance DATE,
+    statut BOOLEAN DEFAULT FALSE,  -- Statut de la notification (lue ou non)
+    FOREIGN KEY (idUser) REFERENCES users(id),
+    FOREIGN KEY (idArtOrgl) REFERENCES Art(id)
+);
+INSERT INTO notifications_renouvellement (id_client, message, date_echeance)
+VALUES (1, 'Votre abonnement arrive à expiration. Veuillez le renouveler avant le 01/02/2025.', '2025-02-01');
+
+
+CREATE TABLE notifications_renouvellement (
+    id SERIAL PRIMARY KEY,
+    idUser INT,
+    idArt INT,
+    message TEXT,
+    date_echeance DATE,
+    statut BOOLEAN DEFAULT FALSE,  -- Statut de la notification (lue ou non)
+    FOREIGN KEY (idUser) REFERENCES users(id),
+    FOREIGN KEY (idArtOrgl) REFERENCES Art(id)
+);
+INSERT INTO notifications_annuite (id_client, message, date_notification, date_echeance)
+VALUES (1, 'Votre annuité doit être réglée avant le 15/02/2025.', '2025-02-15');
+
+
+
 
 drop table NotificationSame;
 
@@ -142,7 +172,7 @@ CREATE VIEW LitigeDetails AS
 SELECT
     l.id AS litigeId,
     l.description AS litigeDescription,
-    l.dateDebut AS litigeDateDebut,
+    l.dateDebut AS litigeDateDebut, 
     l.statut AS litigeStatut,
     a1.nom AS article1Nom,
     a2.nom AS article2Nom

@@ -8,7 +8,7 @@ const {
   updateLitige,
   deleteLitige,
 } = require("./litige");
-const { getContrats, createContrat, getContratById, updateContrat, deleteContrat } = require('./contrats');
+const { getContrats, createContrat, getContratById, updateContrat, deleteContrat,updateDateArt } = require('./contrats');
 const amm = express.Router();
 
 amm.use(bodyParser.json());
@@ -58,6 +58,34 @@ amm.post('/contrats', async (req, res) => {
     res.status(500).send('Erreur serveur');
   }
 });
+amm.post('/payement', async (req, res) => {
+  const addMonthsToDate = (date, monthsToAdd) => {
+    const newDate = new Date(date);
+
+    newDate.setMonth(newDate.getMonth() + monthsToAdd);
+
+    return newDate;
+  };
+
+  try {
+    const { id,date, mois } = req.body;
+
+    const newDate = addMonthsToDate(date, mois);
+    await updateDateArt(id, newDate);
+    
+    const result = await db.query('SELECT * FROM Art');
+
+    res.status(200).json(result.rows);
+
+    // Vous pouvez également enregistrer ou effectuer d'autres actions ici, par exemple créer un contrat
+    // const contrat = await createContrat(req.body);
+    // res.status(201).json(contrat);
+  } catch (error) {
+    console.error('Erreur lors du traitement du paiement:', error);
+    res.status(500).send('Erreur serveur');
+  }
+});
+
 amm.delete('/contrats/:id', async (req, res) => {
   try {
     await deleteContrat(req.params.id);

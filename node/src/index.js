@@ -52,8 +52,9 @@ app.get('/getArt',getArt);
 app.post('/createArt', createArt);
 app.put('/updateArt/:id',updateArt);
 
-app.get('/getNotification',getNotification);
-app.post('/createNotification',createNotification);
+// app.get('/getNotification',getNotification);
+
+// app.post('/createNotification',createNotification);
 
 app.use("/amm", amm);
 

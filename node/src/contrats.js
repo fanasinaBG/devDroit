@@ -39,6 +39,17 @@ const updateContrat = async (id, contrat) => {
   return result.rows[0];
 };
 
+const updateDateArt = async (id, date) => {
+  const query = `
+    UPDATE Art
+    SET datefin = $1
+    WHERE id = $2;
+  `;
+  console.log(date);
+  
+  await db.query(query, [date, id]);
+};
+
 // Supprimer un contrat
 const deleteContrat = async (id) => {
   const query = 'DELETE FROM Contrats WHERE id = $1';
@@ -51,4 +62,5 @@ module.exports = {
   getContratById,
   updateContrat,
   deleteContrat,
+  updateDateArt,
 };
